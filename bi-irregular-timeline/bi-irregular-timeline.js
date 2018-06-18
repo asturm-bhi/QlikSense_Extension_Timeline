@@ -673,6 +673,11 @@ define(["jquery", "qlik", "./scripts/vis-fix2628.min", "css!./styles/vis.min.css
                     } else if (layout.moveToTime && layout.moveToTime != 0) {
                         timeline.moveTo(dateFromQlikNumber(layout.moveToTime));
                     }
+			
+		    setTimeout(function(){ 
+		        timeline.moveTo(dateFromQlikNumber(layout.moveToTime));
+		    }, 1000);
+			
                     $("#" + containerId).css('cursor', 'default');
 
                     timeline.on('select', function (properties) {
