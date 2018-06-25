@@ -667,17 +667,20 @@ define(["jquery", "qlik", "./scripts/vis-fix2628.min", "css!./styles/vis.min.css
                     timeline.setOptions(options);
                     if (useGroups) timeline.setGroups(groups);
                     timeline.setItems(dataItems);
-                    //console.log(timeline);
-                    if (layout.fitAllInWindow) {
+					
+                    //if there's only one data point in the timeline show it in view 
+                    if (layout.fitAllInWindow || dataItems.length == 1) {
                         timeline.fit();
                     } else if (layout.moveToTime && layout.moveToTime != 0) {
                         timeline.moveTo(dateFromQlikNumber(layout.moveToTime));
+						//groups redraw takes too long, call moveTo again 
+						 if (useGroups) {
+							setTimeout(function(){ 
+								 timeline.moveTo(dateFromQlikNumber(layout.moveToTime), {animation:false});
+							}, 1);
+						 }
                     }
-			
-		    setTimeout(function(){ 
-		        timeline.moveTo(dateFromQlikNumber(layout.moveToTime));
-		    }, 1000);
-			
+
                     $("#" + containerId).css('cursor', 'default');
 
                     timeline.on('select', function (properties) {
